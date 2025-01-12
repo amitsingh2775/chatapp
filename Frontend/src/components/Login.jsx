@@ -11,7 +11,7 @@ export const Login = ({ setUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://chatapp-rnaocy3wq-amits-projects-9a022097.vercel.app/api/auth/login', {
+      const res = await axios.post('http://localhost:5000/api/auth/login', {
         username,
         password,
       });
