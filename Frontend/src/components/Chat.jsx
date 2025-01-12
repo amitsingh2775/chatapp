@@ -13,7 +13,7 @@ export const Chat = ({ user }) => {
   const navigate = useNavigate(); // Initialize navigate for redirection
 
   useEffect(() => {
-    const newSocket = io('https://chatapp-rnaocy3wq-amits-projects-9a022097.vercel.app');
+    const newSocket = io('http://localhost:5000');
     setSocket(newSocket);
 
     newSocket.emit('join', user._id);
