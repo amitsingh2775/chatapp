@@ -53,6 +53,20 @@ const socketConfig = (server) => {
       io.emit('updateOnlineUsers', Object.keys(onlineUsers));
       console.log('User disconnected:', socket.id);
     });
+
+    // User leaves room
+    socket.on('leaveRoom', () => {
+      const userId = Object.keys(onlineUsers).find(
+        (id) => onlineUsers[id].socketId === socket.id
+      );
+      if (userId) {
+        delete onlineUsers[userId];
+        io.emit('updateOnlineUsers', Object.keys(onlineUsers));
+        console.log(`User ${userId} left the room`);
+        // Emit event to redirect to login page
+        socket.emit('redirectToLogin');
+      }
+    });
   });
 
   return io;

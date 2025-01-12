@@ -5,7 +5,7 @@ const http = require('http');
 const socketConfig = require('./socket/socketConfig');
 const authRoutes = require('./routes/authRoutes');
 
-require('dotenv').config(); // Load environment variables from .env
+require('dotenv').config(); 
 
 const app = express();
 const server = http.createServer(app);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import { useNavigate } from 'react-router-dom'; // Import navigate for redirection
 
 export const Chat = ({ user }) => {
   if (!user) return <div>Loading...</div>;
@@ -9,7 +10,7 @@ export const Chat = ({ user }) => {
   const [typing, setTyping] = useState('');
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [socket, setSocket] = useState(null);
-  //const [showProfilePopup, setShowProfilePopup] = useState(false);
+  const navigate = useNavigate(); // Initialize navigate for redirection
 
   useEffect(() => {
     const newSocket = io('https://chatapp-rnaocy3wq-amits-projects-9a022097.vercel.app');
@@ -50,13 +51,12 @@ export const Chat = ({ user }) => {
     }
   };
 
-  // const toggleProfilePopup = () => {
-  //   setShowProfilePopup(!showProfilePopup);
-  // };
-
-  // const closePopup = () => {
-  //   setShowProfilePopup(false);
-  // };
+  const handleLeave = () => {
+    if (socket) {
+      socket.emit('leaveRoom'); // Use a custom event name
+      navigate('/login'); // Redirect to login page
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen bg-black text-white">
@@ -71,10 +71,10 @@ export const Chat = ({ user }) => {
             <p className="text-sm text-gray-400">{user.email}</p>
           </div>
           <button
-           // onClick={toggleProfilePopup}
-            className="bg-gray-800 text-white px-3 py-1 rounded-full hover:bg-gray-700"
+            onClick={handleLeave}
+            className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700"
           >
-            Profile
+            Leave
           </button>
         </div>
         <div className="flex items-center space-x-2">
@@ -82,9 +82,6 @@ export const Chat = ({ user }) => {
           <h4 className="text-md font-semibold">{onlineUsers.length}</h4>
         </div>
       </div>
-
-      {/* Online Users */}
-      {/* ... (omitted for brevity) */}
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-800">
@@ -147,23 +144,6 @@ export const Chat = ({ user }) => {
           </button>
         </div>
       </form>
-
-      {/* Profile Popup */}
-      {/* {showProfilePopup && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-80">
-            <h3 className="text-lg font-bold text-white mb-2">Profile</h3>
-            <p className="text-sm text-gray-300">Username: {user.username}</p>
-            <p className="text-sm text-gray-300">Email: {user.email}</p>
-            <button
-              onClick={closePopup}
-              className="mt-4 bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };
